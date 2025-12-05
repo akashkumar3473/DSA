@@ -4,15 +4,7 @@ class Solution {
         for(int num : nums){
             sum += num;
         }
-        int left = 0 , right = sum;
-        int ans = 0;
-        for(int i=0; i<nums.length-1;i++){
-            left += nums[i];
-            right -= nums[i];
-            if(Math.abs(left-right)%2==0){
-                ans++;
-            }
-        }
-        return ans;
+       if(sum%2==0) return nums.length-1;
+        return 0;
     }
 }
