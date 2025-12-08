@@ -1,17 +1,13 @@
 class Solution {
     public int countTriples(int n) {
-        int count = 0;
-
-        for (int a = 1; a <= n; a++) {
-            for (int b = 1; b <= n; b++) {
-                int c2 = a * a + b * b;
-                int c = (int) Math.sqrt(c2);
-
-                if (c * c == c2 && c <= n) {
-                    count++;
+        int count =0;
+        for(int i=1; i<n-1;i++){
+            for(int j=i+1;j<n;j++){
+                for(int k=i+2;k<n+1;k++){
+                    if(i*i+j*j==k*k) count++;
                 }
             }
         }
-        return count;   
+        return 2*count;
     }
 }
