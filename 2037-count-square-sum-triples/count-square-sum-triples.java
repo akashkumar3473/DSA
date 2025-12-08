@@ -12,6 +12,6 @@ class Solution {
                 }
             }
         }
-        return count;   // FIXED
+        return count;   
     }
 }
