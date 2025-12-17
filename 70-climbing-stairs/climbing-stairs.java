@@ -1,13 +1,14 @@
 class Solution {
+    public int solve(int n, int i, int[] dp){
+        if(i==n) return 1;
+        if(i>n) return 0;
+        if(dp[i]!=0) return dp[i];
+        return dp[i] = solve(n,i+1,dp) + solve(n,i+2,dp);
+    }
     public int climbStairs(int n) {
-        if(n<=2) return n;
-        int a = 1;
-        int b = 2;
-        for(int i = 3; i<=n;i++){
-            int c = a+b;
-            a = b;
-            b = c;
-        }
-        return b;
+        int dp[] = new int[n+1];
+        return solve(n,0,dp);
+
+
     }
 }
