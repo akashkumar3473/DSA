@@ -6,16 +6,17 @@ class Solution {
             int mid = lo + (hi - lo) / 2;
             // right
             if (nums[mid] > nums[hi]) {
-                lo = mid + 1;      
+                lo = mid + 1;
+                
+                    
             } 
             // mid ans left
             else if (nums[mid] < nums[hi]) {
-                hi = mid;         
-            } 
-            // duplicate
-            else {
-                hi--;              
+                hi = mid;        
             }
+            else{
+                hi--;
+            } 
         }
         return nums[lo];
     }
