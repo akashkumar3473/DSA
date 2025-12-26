@@ -21,7 +21,7 @@ class Solution {
             sum += arr[i];
         }
         int lo =mx, hi = sum, minC = sum;
-        while(lo<=hi){   // TC = O(n*(sum-mx))
+        while(lo<=hi){   // TC = O(n*log(sum-mx))
             int mid = (lo+hi)/2;
             if(isPosible(mid,arr,d)==true){
                 minC = mid;
