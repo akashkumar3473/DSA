@@ -1,12 +1,15 @@
 class Solution {
     public int mySqrt(int x) {
-        long lo=0, hi=x;
-        while(lo<=hi){
-            long mid = lo+(hi-lo)/2;
-            if(mid*mid==(long)x) return (int)mid;
-            if(mid*mid>(long)x) hi=mid-1;
-            else lo = mid+1;
+        if (x == 0) return 0;   // handle edge case
+
+        int lo = 1, hi = x;
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (mid == x / mid) return mid;
+            if (mid > x / mid) hi = mid - 1;
+            else lo = mid + 1;
         }
-        return (int)hi;
+        return hi;
     }
 }
