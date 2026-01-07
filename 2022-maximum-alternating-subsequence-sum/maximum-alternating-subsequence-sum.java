@@ -1,20 +1,26 @@
 class Solution {
-    public long solve(int[] nums,int i, int n,int si,long[][] dp){
+    long[][] dp;
+    public long solve(int[] nums, int i, int n,int pos){
         if(i>=n) return 0;
-        int siIdx = (si == 1) ? 0 : 1;
-        if (dp[i][siIdx] != -1) return dp[i][siIdx];
-        long take =si * nums[i] + solve(nums,i+1,n,-si,dp);
-        long skip = solve(nums,i+1,n,si,dp);
-        return dp[i][siIdx] = Math.max(take,skip);
+        if(dp[i][pos]!=-1) return dp[i][pos];
+        // take
 
+        long take;
+        if(pos == 0){
+            take = nums[i] + solve(nums,i+1,n,1);
+        }
+        else{
+            take = -nums[i] + solve(nums,i+1,n,0);
+        }
+        long skip = solve(nums,i+1,n,pos);
+        return dp[i][pos] = Math.max(take,skip);
     }
     public long maxAlternatingSum(int[] nums) {
         int n = nums.length;
-        long[][] dp = new long[n][2];
-
-        for (int i = 0; i < n; i++)
-        Arrays.fill(dp[i], -1);
-        return solve(nums,0,n,1,dp);
-         
+        dp = new long[n][2];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        return solve(nums,0,n,0);
     }
 }
