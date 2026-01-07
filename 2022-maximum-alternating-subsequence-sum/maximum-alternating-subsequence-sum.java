@@ -16,7 +16,7 @@ class Solution {
         return dp[i][pos] = Math.max(take,skip);
     }
     public long maxAlternatingSum(int[] nums) {
-        int n = nums.length;
+        final int n = nums.length;
         dp = new long[n][2];
         for (int i = 0; i < n; i++) {
             Arrays.fill(dp[i], -1);
