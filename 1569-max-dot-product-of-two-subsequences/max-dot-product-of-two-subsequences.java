@@ -1,19 +1,26 @@
-public class Solution {
+class Solution {
     public int maxDotProduct(int[] nums1, int[] nums2) {
-        int m = nums1.length, n = nums2.length;
-        int[] current = new int[n + 1], previous = new int[n + 1];
-        Arrays.fill(current, Integer.MIN_VALUE);
-        Arrays.fill(previous, Integer.MIN_VALUE);
+        final int n = nums1.length, m = nums2.length;
+        int[][] dp = new int[n + 1][m + 1];
 
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                int curr_product = nums1[i - 1] * nums2[j - 1];
-                current[j] = Math.max(Math.max(Math.max(curr_product, previous[j]), current[j - 1]), curr_product + Math.max(0, previous[j - 1]));
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                dp[i][j] = Integer.MIN_VALUE / 2;
             }
-            int[] temp = current;
-            current = previous;
-            previous = temp;
         }
-        return previous[n];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                int prod = nums1[i - 1] * nums2[j - 1];
+                dp[i][j] = Math.max(
+                        prod,
+                        Math.max(
+                                dp[i - 1][j - 1] + prod,
+                                Math.max(dp[i - 1][j], dp[i][j - 1])
+                        )
+                );
+            }
+        }
+        return dp[n][m];
     }
 }
