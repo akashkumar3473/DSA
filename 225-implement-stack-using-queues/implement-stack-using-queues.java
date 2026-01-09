@@ -9,7 +9,6 @@ class MyStack {
     public void push(int x) {
         q.offer(x);
         int size = q.size();
-        // Rotate previous elements
         for (int i = 1; i < size; i++) {
             q.offer(q.poll());
         }
