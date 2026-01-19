@@ -1,17 +1,14 @@
 class Solution {
-    HashMap<Integer,Integer> map = new HashMap<>();
+    int[] dp;
+    public int solve(int n, int i){
+        if(i==n) return 1;
+        if(i>n) return 0;
+        if(dp[i]!=-1) return dp[i];
+        return dp[i] = solve(n,i+1) + solve(n,i+2);
+    }
     public int climbStairs(int n) {
-        
-        if(n<=2) return n;
-        if(map.containsKey(n)){
-            return map.get(n);
-
-        }
-        else{
-            int res = climbStairs(n-1) + climbStairs(n-2);
-            map.put(n,res);
-            return res;
-        }
-
+        dp = new int[n];
+        Arrays.fill(dp,-1);
+        return solve(n,0);
     }
 }
