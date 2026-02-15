@@ -1,66 +1,73 @@
+import java.util.*;
+
 class Solution {
 
-    class Pair{
+    class Pair {
         int row;
         int col;
+
+        Pair(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
     }
-    int r[] = {1,0,-1,0};
-    int c[] = {0,1,0,-1};
 
-    void bfs(char[][] grid, boolean isVis[][], int x, int y, int totalRows, int totalCols){
-         Queue<Pair> q = new LinkedList<>();
-         Pair p = new Pair();
-         p.row = x;
-         p.col = y;
+    private void bfs(int row, int col, char[][] grid, boolean[][] vis) {
+        int m = grid.length;
+        int n = grid[0].length;
 
-         q.add(p);
-         isVis[x][y] = true;
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(row, col));
+        vis[row][col] = true;   // mark starting cell visited
 
-         while(!q.isEmpty()){
-            Pair curr = q.poll();
-            int currRow = curr.row;
-            int currCol = curr.col;
+        while (!q.isEmpty()) {
 
-            for(int i=0;i<4;i++){
-                int newCurrRow = currRow +r[i]; 
-                int newCurrCol= currCol +c[i]; 
+            Pair front = q.remove();
+            int r = front.row;
+            int c = front.col;
 
-                if(check(newCurrRow, newCurrCol, totalRows, totalCols) &&
-                   !isVis[newCurrRow][newCurrCol] &&
-                   grid[newCurrRow][newCurrCol] == '1'){
-                    isVis[newCurrRow][newCurrCol]=true;
-                    Pair temp = new Pair();
-                    temp.row = newCurrRow;
-                    temp.col = newCurrCol;
-                    q.add(temp);
-
-                }
-                
+            // top
+            if (r - 1 >= 0 && !vis[r - 1][c] && grid[r - 1][c] == '1') {
+                q.add(new Pair(r - 1, c));
+                vis[r - 1][c] = true;
             }
-            
-         }
 
+            // down
+            if (r + 1 < m && !vis[r + 1][c] && grid[r + 1][c] == '1') {
+                q.add(new Pair(r + 1, c));
+                vis[r + 1][c] = true;
+            }
+
+            // left
+            if (c - 1 >= 0 && !vis[r][c - 1] && grid[r][c - 1] == '1') {
+                q.add(new Pair(r, c - 1));
+                vis[r][c - 1] = true;
+            }
+
+            // right
+            if (c + 1 < n && !vis[r][c + 1] && grid[r][c + 1] == '1') {
+                q.add(new Pair(r, c + 1));
+                vis[r][c + 1] = true;
+            }
+        }
     }
-    boolean check(int row,int col,int n, int m){
-        if(row>=0 && row<n && col>=0 && col<m) return true;
-        return false;
-    }
+
     public int numIslands(char[][] grid) {
-       
-        int n = grid.length;
-        int m = grid[0].length;
-        boolean isVis[][] = new boolean[n][m];
+        int m = grid.length;
+        int n = grid[0].length;
 
-        int count =0;
+        boolean[][] vis = new boolean[m][n];
+        int count = 0;
 
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(isVis[i][j]==false && grid[i][j]=='1'){
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1' && !vis[i][j]) {
+                    bfs(i, j, grid, vis);
                     count++;
-                    bfs(grid,isVis,i,j,n,m);
                 }
             }
         }
+
         return count;
     }
 }
