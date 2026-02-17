@@ -1,21 +1,19 @@
 class Solution {
-    private void bfs(int start,List<List<Integer>> adj,boolean[] vis,int end){
-        Queue<Integer> q = new LinkedList<>();
+    private boolean dfs(int start, List<List<Integer>> adj,boolean[] vis, int end) {
+        if (start == end) 
+            return true;
 
-        q.add(start);
-        vis[start]=true;
-        while(q.size()>0){
-            int front = q.remove();
-            for(int ele : adj.get(front)){
-                if(!vis[ele]){
-                    q.add(ele);
-                    vis[ele] = true;
-                    if(ele==end) return;
-                    
+        vis[start] = true;
+        for (int ele : adj.get(start)) {
+            if (!vis[ele]) {
+                if(dfs(ele, adj, vis, end)){
+                    return true;
                 }
             }
         }
+        return false;
     }
+
     public boolean validPath(int n, int[][] edges, int start, int end) {
         if(start==end) return true;
         List<List<Integer>> adj = new ArrayList<>();
@@ -29,7 +27,6 @@ class Solution {
             adj.get(b).add(a);
         }
         boolean[] vis  = new boolean[n];
-        bfs(start,adj,vis,end);
-        return vis[end];
+        return dfs(start,adj,vis,end);
     }
 }
