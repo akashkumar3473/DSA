@@ -1,40 +1,71 @@
 class Solution {
 
-    public int dfs(int i, int j, int[][] grid, int m, int n) {
+    class Pair {
+        int row;
+        int col;
 
-      
-        if (i < 0 || j < 0 || i >= m || j >= n || grid[i][j] == 0)
-            return 0;
+        Pair(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+    }
 
-        // visited
-        grid[i][j] = 0;
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, 1, -1};
+    int n;
+    int m;
 
-        int area = 1;
+    public boolean isValid(int r, int c) {
+        return (r >= 0 && r < n && c >= 0 && c < m);
+    }
 
-        area += dfs(i - 1, j, grid, m, n); // up
-        area += dfs(i + 1, j, grid, m, n); // down
-        area += dfs(i, j - 1, grid, m, n); // left
-        area += dfs(i, j + 1, grid, m, n); // right
+    public int bfs(int[][] grid, boolean[][] isVisited, int r, int c) {
 
-        return area;
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(r, c));
+        isVisited[r][c] = true;
+
+        int count = 1;   
+
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            int i = p.row;
+            int j = p.col;
+
+            for (int k = 0; k < 4; k++) {
+                int adjrow = i + dx[k];
+                int adjcol = j + dy[k];
+
+                if (isValid(adjrow, adjcol) &&
+                        grid[adjrow][adjcol] == 1 &&
+                        !isVisited[adjrow][adjcol]) {
+
+                    isVisited[adjrow][adjcol] = true;
+                    q.add(new Pair(adjrow, adjcol));
+                    count++;   
+                }
+            }
+        }
+        return count;
     }
 
     public int maxAreaOfIsland(int[][] grid) {
 
-        int m = grid.length;
-        int n = grid[0].length;
-        int maxArea = 0;
+        n = grid.length;
+        m = grid[0].length;
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+        boolean[][] isVisited = new boolean[n][m];
+        int max = 0;
 
-                if (grid[i][j] == 1) {
-                    int area = dfs(i, j, grid, m, n);
-                    maxArea = Math.max(maxArea, area);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+
+                if (grid[i][j] == 1 && !isVisited[i][j]) {
+                    int count = bfs(grid, isVisited, i, j);
+                    max = Math.max(max, count);
                 }
             }
         }
-
-        return maxArea;
+        return max;
     }
 }
