@@ -7,8 +7,20 @@ class Solution {
             this.dist = dist;
         }
     }
+    List<List<Pair>> adj;
+    boolean vis[];
+    int ans  = Integer.MAX_VALUE;
+    private void dfs(int node){
+        vis[node] = true;
+        for(Pair nei : adj.get(node)){
+            ans = Math.min(ans,nei.dist);
+            if(!vis[nei.node]){
+                dfs(nei.node);
+            }
+        }
+    }
     public int minScore(int n, int[][] arr) {
-        List<List<Pair>> adj = new ArrayList<>();
+        adj = new ArrayList<>();
         for(int i=0;i<n+1;i++)
             adj.add(new ArrayList<>());
         for(int[] e : arr){
@@ -18,21 +30,8 @@ class Solution {
             adj.get(u).add(new Pair(v,dist));
             adj.get(v).add(new Pair(u,dist));
         }
-        Queue<Pair> q = new LinkedList<>();
-        boolean vis[] = new boolean[n+1];
-        q.add(new Pair(1,Integer.MAX_VALUE));
-        int ans = Integer.MAX_VALUE;
-        while(!q.isEmpty()){
-            Pair p =q.remove();
-            //if(vis[p.node]) continue;
-            vis[p.node]= true;
-            ans = Math.min(ans,p.dist);
-            for(Pair adjcomp : adj.get(p.node)){
-                if(!vis[adjcomp.node]){
-                    q.add(adjcomp);
-                }
-            }
-        }
+        vis=new boolean[n+1];
+        dfs(1);
         return ans;
     }
 }
