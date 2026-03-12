@@ -3,9 +3,10 @@ class Solution {
     static int[] size;
     public int find(int a){
         if(parent[a]==a) return a;
-        int leader = find(parent[a]);
-        parent[a] = leader;
-        return leader;
+        // int leader = find(parent[a]);
+        // parent[a] = leader;
+        // return leader;
+         return parent[a] = find(parent[a]);
     }
     public void union(int a, int b){
         a = find(a);
