@@ -1,24 +1,23 @@
 class Solution {
-    int[][] dp;
-    private int solve(int i ,int j, String s1, String s2){
-        if(i<0) return j+1;
-        if(j<0) return i+1;
-        if(dp[i][j]!=-1) return dp[i][j];
-        if(s1.charAt(i)==s2.charAt(j)){
-            return dp[i][j] = solve(i-1,j-1,s1,s2);
-        }
-        int insert = solve(i,j-1,s1,s2);
-        int delete = solve(i-1,j,s1,s2);
-        int replace = solve(i-1,j-1,s1,s2);
+    Integer[][] dp;
+    int n1;
+    int n2;
+    public int solve(int i, int j, String w1, String w2){
+        if(i==n1) return n2-j;
+        if(j==n2) return n1-i;
+        if(dp[i][j]!=null) return dp[i][j];
+        if(w1.charAt(i)==w2.charAt(j)) return solve(i+1,j+1,w1,w2);
 
-        return dp[i][j] = 1 + Math.min(insert,Math.min(delete,replace));
+        int insert = 1+solve(i,j+1,w1,w2);
+        int delete = 1+solve(i+1,j,w1,w2);
+        int replace = 1+ solve(i+1,j+1,w1,w2);
+
+        return dp[i][j] = Math.min(insert,Math.min(delete,replace));
     }
-    public int minDistance(String word1, String word2) {
-        int n = word1.length(), m = word2.length();
-        dp=new int[n][m];
-        for(int i=0;i<n;i++){
-            Arrays.fill(dp[i],-1);
-        }
-        return solve(n-1,m-1,word1,word2);
+    public int minDistance(String w1, String w2) {
+        n1 = w1.length();
+        n2 = w2.length();
+        dp = new Integer[n1][n2];
+        return solve(0,0,w1,w2);
     }
 }
