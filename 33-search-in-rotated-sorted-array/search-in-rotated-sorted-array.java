@@ -9,7 +9,7 @@ class Solution {
                 return mid;
             }
             if(nums[lo]<=nums[mid]){
-                if(nums[lo] <= target  && nums[mid]>target){
+                if(target>= nums[lo] && target<nums[mid]){
                     hi = mid -1;
                 }else{
                     lo = mid +1;
