@@ -1,23 +1,27 @@
 class Solution {
-    Integer[][] dp;
-    public int solve(int idx,int[] coins,int t){
-        if(idx==0){
-            if(t%coins[idx]==0) return t/coins[idx];
-            else return (int)1e9;
-        }
-        if(dp[idx][t]!=null) return dp[idx][t];
-        int skip = solve(idx-1,coins,t);
-
-        int take = (int)1e9;
-        if(coins[idx]<=t){
-            take = 1 + solve(idx,coins,t-coins[idx]);
-        }
-        return dp[idx][t] = Math.min(take,skip);
-    }
     public int coinChange(int[] coins, int t) {
         int n = coins.length;
-        dp = new Integer[n][t+1];
-        int ans = solve(n-1,coins,t);
+        int[][] dp = new int[n][t+1];
+        
+        // base case
+        for(int target =0;target<=t;target++){
+            if(target%coins[0]==0) dp[0][target] = target/coins[0];
+            else dp[0][target] = (int)1e9;
+        }
+
+        for(int i=1;i<n;i++){
+            for(int target =0;target<=t;target++){
+                int skip = dp[i-1][target];
+
+                int take = (int)1e9;
+                if(coins[i]<=target){
+                    take = 1 + dp[i][target-coins[i]];
+                }
+                dp[i][target] = Math.min(skip,take);
+            }
+        }
+       
+        int ans = dp[n-1][t];
         return ans >= (int)1e9 ? -1 : ans;
     }
 }
