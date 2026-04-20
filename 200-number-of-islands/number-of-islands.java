@@ -1,53 +1,63 @@
 class Solution {
+
     class Pair{
         int row;
         int col;
-        Pair(int row,int col){
-            this.row = row;
-            this.col = col;
-        }
     }
-    int n;
-    int m;
-    int[] dx = {-1,1,0,0};
-    int[] dy = {0,0,1,-1};
-    public boolean isValid(int r, int c, int n, int m){
+    int r[] = {1,0,-1,0,};
+    int c[] = {0,1,0,-1};
 
-        if(r>=0 && r<n && c>=0 && c<m) return true;
-        return false;
-    }
-    public void bfs(char[][] grid,boolean[][] isVisited,int r,int c){
-        isVisited[r][c] = true;
-        Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(r,c));
-        while(!q.isEmpty()){
-            Pair p = q.poll();
-            int i=p.row;
-            int j =p.col;
-            for(int k=0;k<4;k++){
-                int adjrow = i + dx[k];
-                int adjcol = j + dy[k];
-                if(isValid(adjrow,adjcol,n,m)
-                && grid[adjrow][adjcol]=='1'
-                && !isVisited[adjrow][adjcol]){
-                    
-                    isVisited[adjrow][adjcol]=true;
-                    q.add(new Pair(adjrow,adjcol));
+    void bfs(char[][] grid, boolean isVis[][], int x, int y, int totalRows, int totalCols){
+         Queue<Pair> q = new LinkedList<>();
+         Pair p = new Pair();
+         p.row = x;
+         p.col = y;
+
+         q.add(p);
+         isVis[x][y] = true;
+
+         while(!q.isEmpty()){
+            Pair curr = q.poll();
+            int currRow = curr.row;
+            int currCol = curr.col;
+
+            for(int i=0;i<4;i++){
+                int newCurrRow = currRow +r[i]; 
+                int newCurrCol= currCol +c[i]; 
+
+                if(check(newCurrRow, newCurrCol, totalRows, totalCols) &&
+                   !isVis[newCurrRow][newCurrCol] &&
+                   grid[newCurrRow][newCurrCol] == '1'){
+                    isVis[newCurrRow][newCurrCol]=true;
+                    Pair temp = new Pair();
+                    temp.row = newCurrRow;
+                    temp.col = newCurrCol;
+                    q.add(temp);
+
                 }
                 
             }
-        }
+            
+         }
+
+    }
+    boolean check(int row,int col,int n, int m){
+        if(row>=0 && row<n && col>=0 && col<m) return true;
+        return false;
     }
     public int numIslands(char[][] grid) {
-        n = grid.length;
-        m = grid[0].length;
+       
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean isVis[][] = new boolean[n][m];
+
         int count =0;
-        boolean[][] isVisited = new boolean[n][m];
+
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(grid[i][j]=='1' && isVisited[i][j]==false){
-                    bfs(grid,isVisited,i,j);
+                if(isVis[i][j]==false && grid[i][j]=='1'){
                     count++;
+                    bfs(grid,isVis,i,j,n,m);
                 }
             }
         }
