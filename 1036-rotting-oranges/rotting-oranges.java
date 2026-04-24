@@ -1,74 +1,25 @@
-import java.util.*;
-
 class Solution {
-    
-    class Pair {
-        int row;
-        int col;
-        int time;
-        
-        Pair(int row, int col, int time) {
-            this.row = row;
-            this.col = col;
-            this.time = time;
-        }
-    }
-    
     public int orangesRotting(int[][] grid) {
-        
-        int m = grid.length;
-        int n = grid[0].length;
-        
-        Queue<Pair> q = new LinkedList<>();
-        boolean[][] vis = new boolean[m][n];
-        
-        int fresh = 0;
-        
-        for(int i = 0; i < m; i++) {
-            for(int j = 0; j < n; j++) {
-                if(grid[i][j] == 2) {
-                    q.add(new Pair(i, j, 0));  
-                    vis[i][j] = true;
-                }
-                if(grid[i][j] == 1) {
-                    fresh++;
+        Queue<int[]> q = new LinkedList<>();
+        int fresh = 0, time = 0;
+        for (int i=0;i<grid.length;i++) for (int j=0;j<grid[0].length;j++) {
+            if (grid[i][j]==2) q.offer(new int[]{i,j});
+            else if (grid[i][j]==1) fresh++;
+        }
+        int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+        while (!q.isEmpty() && fresh>0) {
+            int sz = q.size(); time++;
+            for (int k=0;k<sz;k++) {
+                int[] cur = q.poll();
+                for (int[] d:dirs) {
+                    int ni=cur[0]+d[0], nj=cur[1]+d[1];
+                    if (ni>=0&&nj>=0&&ni<grid.length&&nj<grid[0].length&&grid[ni][nj]==1) {
+                        grid[ni][nj]=2; fresh--; q.offer(new int[]{ni,nj});
+                    }
                 }
             }
         }
-        
-        int time = 0;
-        
-        int[] dr = {-1, 0, 1, 0};
-        int[] dc = {0, 1, 0, -1};
-        
-        //  BFS
-        while(!q.isEmpty()) {
-            
-            Pair front = q.remove();
-            
-            int r = front.row;
-            int c = front.col;
-            int t = front.time;
-            
-            time = Math.max(time, t);
-            
-            for(int k = 0; k < 4; k++) {
-                int nr = r + dr[k];
-                int nc = c + dc[k];
-                
-                if(nr >= 0 && nr < m && nc >= 0 && nc < n
-                        && !vis[nr][nc] && grid[nr][nc] == 1) {
-                    
-                    vis[nr][nc] = true;
-                    fresh--;
-                    
-                    q.add(new Pair(nr, nc, t + 1));
-                }
-            }
-        }
-        
-        if(fresh > 0) return -1;
-        
-        return time;
+        return fresh==0 ? time : -1;
+
     }
 }
